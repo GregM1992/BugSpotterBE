@@ -7,7 +7,7 @@ namespace BugSpotterBE.API
     {
         public static void Map(WebApplication app)
         {
-            app.MapGet("/posts", (BugSpotterBEDbContext db) => // Gets all posts with their tags and comments
+            app.MapGet("/posts", (BugSpotterBEDbContext db) => // Gets all posts with their tags 
             {
                 var allPosts = db.Posts.Include(p => p.Tags).Select(p => new
                 {
