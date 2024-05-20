@@ -6,7 +6,7 @@ namespace BugSpotterBE.API
     {
         public static void Map(WebApplication app)
         {
-            app.MapGet("/posts/comments/{postId}", (BugSpotterBEDbContext db, int postId) => //get single posts comments
+            app.MapGet("comments/{postId}", (BugSpotterBEDbContext db, int postId) => //get single posts comments
             {
                 try
                 {
