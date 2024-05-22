@@ -149,9 +149,19 @@ namespace BugSpotterBE.API
                 {
                     return Results.NotFound("there are no posts that match this tag");
                 };
+            });
 
-
-                
+            app.MapGet("/collections/posts/{collectionId}", (BugSpotterBEDbContext db, int collectionId) =>
+            {
+                var postsByCollectionId = db.Posts.Where(p => p.CollectionId == collectionId).ToList();
+                if (!postsByCollectionId.Any())
+                {
+                    return Results.NotFound("There are no posts in this collection");
+                }
+                else
+                {
+                    return Results.Ok(postsByCollectionId);
+                }
             });
         }
     }
