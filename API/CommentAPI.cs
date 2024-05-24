@@ -1,4 +1,5 @@
 ﻿using BugSpotterBE.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugSpotterBE.API
 {
@@ -10,7 +11,20 @@ namespace BugSpotterBE.API
             {
                 try
                 {
-                    var postsComments = db.Comments.Where(c => c.PostId == postId).ToList();
+                    var postsComments = db.Comments.Include(c => c.User).Where(c => c.PostId == postId).Select(c => new
+                    {
+                        c.Id,
+                        c.UserId,
+                        c.PostId,
+                        c.Content,
+                        User = new
+                        {
+                            c.User.Id,
+                            c.User.UserName,
+
+                        }
+                    }).ToList();
+                
                 return Results.Ok(postsComments);
 
                 }
