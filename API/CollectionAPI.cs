@@ -1,5 +1,6 @@
 ﻿using BugSpotterBE.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
 namespace BugSpotterBE.API
@@ -10,7 +11,14 @@ namespace BugSpotterBE.API
         {
             app.MapGet("/collections/{userId}", (BugSpotterBEDbContext db, int userId) => // get users collections
             {
-                var usersCollections = db.Collections.Where(x => x.UserId == userId).ToList();
+                var usersCollections = db.Collections.Include(c => c.Posts).Where(c => c.UserId == userId).Select(c => new
+                {
+                    c.Id,
+                    c.Name,
+                    c.UserId,
+                    c.Favorite,
+                    c.numberOfPosts,
+                }).ToList();
                 if (usersCollections.Any())
                 {
                     return Results.Ok(usersCollections);
@@ -20,7 +28,18 @@ namespace BugSpotterBE.API
                     return Results.NotFound("This user has no collections yet");
                 }
             });
-
+            app.MapGet("/collections/details/{collectionId}", (BugSpotterBEDbContext db, int collectionId) => // get single collection
+            {
+                var collection = db.Collections.Include(c => c.Posts).FirstOrDefault(c => c.Id == collectionId);
+                if (collection != null)
+                {
+                    return Results.Ok(collection);
+                }
+                else
+                {
+                    return Results.NotFound("This collection doesnt exist");
+                }
+            });
             app.MapPost("/collections", (BugSpotterBEDbContext db, CreateCollectionDTO newCollectionDTO) => // create collection
             {
                 try

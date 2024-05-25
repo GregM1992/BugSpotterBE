@@ -61,6 +61,54 @@ namespace BugSpotterBE.API
                     return Results.Ok(usersPosts);
                 }
             });
+            app.MapGet("/posts/details/{postId}", (BugSpotterBEDbContext db, int postId) => //get single post by postId
+            {
+                var singlePost = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).Select(p => new
+                {
+                    p.Id,
+                    p.UserId,
+                    p.CollectionId,
+                    p.Image,
+                    p.Latitude,
+                    p.Longitude,
+                    p.Description,
+                    p.Favorite,
+                    Tags = p.Tags.Select(t => new
+                    {
+                        t.Id,
+                        t.TagType,
+                    })
+                }).FirstOrDefault();
+                if (singlePost == null)
+                {
+                    return Results.NotFound("This post does not exist");
+                }
+                else
+                {
+                    return Results.Ok(singlePost);
+                }
+            });
+
+            app.MapGet("/postTags/{postId}", (BugSpotterBEDbContext db, int postId) =>
+            {
+                var postTags = db.Posts.Include(p => p.Tags).Where(p => p.Id == postId).Select(p => new
+                {
+                    Tags = p.Tags.Select(t => new
+                    {
+                        t.Id,
+                        t.TagType
+                    })
+                }).FirstOrDefault();
+
+                if (postTags == null)
+                {
+                    return Results.NotFound("This post does not exist");
+                }
+                else
+                {
+                    return Results.Ok(postTags);
+                }
+            });
 
             app.MapPost("/posts", (BugSpotterBEDbContext db, CreatePostDTO newPostDTO) => // create new post
             {
@@ -153,7 +201,22 @@ namespace BugSpotterBE.API
 
             app.MapGet("/collections/posts/{collectionId}", (BugSpotterBEDbContext db, int collectionId) =>
             {
-                var postsByCollectionId = db.Posts.Where(p => p.CollectionId == collectionId).ToList();
+                var postsByCollectionId = db.Posts.Include(p => p.Tags).Where(p => p.CollectionId == collectionId).Select(p => new
+                {
+                    p.Id,
+                    p.UserId,
+                    p.CollectionId,
+                    p.Image,
+                    p.Latitude,
+                    p.Longitude,
+                    p.Description,
+                    p.Favorite,
+                    Tags = p.Tags.Select(t => new
+                    {
+                        t.Id,
+                        t.TagType
+                    })
+                }).ToList();
                 if (!postsByCollectionId.Any())
                 {
                     return Results.NotFound("There are no posts in this collection");
