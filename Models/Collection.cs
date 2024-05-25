@@ -7,6 +7,12 @@
         public int UserId { get; set; }
         public bool Favorite { get; set; }
         public ICollection<Post>? Posts { get; set; }
+        public int numberOfPosts {
+            get
+            {
+                return Posts.Count;
+            }
+        }
 
     }
 }
