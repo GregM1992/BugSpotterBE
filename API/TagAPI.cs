@@ -8,7 +8,11 @@ namespace BugSpotterBE.API
         {
             app.MapGet("/tags", (BugSpotterBEDbContext db) =>
             {
-                return db.Tags.ToList();
+                return db.Tags
+                .Select(t => new {
+                    t.Id,
+                    t.TagType,
+                }).ToList();
             });
 
             app.MapPut("/tags/{postId}/{tagId}", (BugSpotterBEDbContext db, int postId, int tagId) =>
