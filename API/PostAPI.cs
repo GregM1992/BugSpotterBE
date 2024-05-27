@@ -219,7 +219,7 @@ namespace BugSpotterBE.API
                 }).ToList();
                 if (!postsByCollectionId.Any())
                 {
-                    return Results.NotFound("There are no posts in this collection");
+                    return Results.NotFound("");
                 }
                 else
                 {
