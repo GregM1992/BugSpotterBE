@@ -10,7 +10,7 @@
         public int numberOfPosts {
             get
             {
-                return Posts.Count;
+                return Posts?.Count ?? 0;
             }
         }
 
