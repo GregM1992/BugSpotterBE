@@ -13,7 +13,7 @@ namespace BugSpotterBE.API
 
                 if (user == null)
                 {
-                    return Results.NotFound("User not registered");
+                    return Results.NotFound("");
                 }
 
                 return Results.Ok(user);
@@ -29,7 +29,7 @@ namespace BugSpotterBE.API
                 }
                 catch (DbUpdateException)
                 {
-                    return Results.BadRequest("Unable to register user");
+                    return Results.BadRequest("");
                 }
             });
 

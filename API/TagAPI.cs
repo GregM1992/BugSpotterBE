@@ -24,7 +24,7 @@ namespace BugSpotterBE.API
                     postToAddTo.Tags = new List<Tag>();
                     postToAddTo.Tags.Add(tagToAdd);
                     db.SaveChanges();
-                    return Results.Ok();
+                    return Results.Created($"/tags/{postToAddTo.Id}", postToAddTo);
                 }
                 else
                 {

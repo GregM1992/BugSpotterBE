@@ -25,7 +25,7 @@ namespace BugSpotterBE.API
                 }
                 else
                 {
-                    return Results.NotFound("This user has no collections yet");
+                    return Results.NotFound("");
                 }
             });
             app.MapGet("/collections/details/{collectionId}", (BugSpotterBEDbContext db, int collectionId) => // get single collection
@@ -37,7 +37,7 @@ namespace BugSpotterBE.API
                 }
                 else
                 {
-                    return Results.NotFound("This collection doesnt exist");
+                    return Results.NotFound("");
                 }
             });
             app.MapPost("/collections", (BugSpotterBEDbContext db, CreateCollectionDTO newCollectionDTO) => // create collection
