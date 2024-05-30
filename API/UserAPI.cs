@@ -7,6 +7,20 @@ namespace BugSpotterBE.API
     {
         public static void Map(WebApplication app)
         {
+
+
+            app.MapGet("/users/{id}", (BugSpotterBEDbContext db, int id) => // get user by id
+            {
+                var user = db.Users.FirstOrDefault(u => u.Id == id);
+
+                if (user == null)
+                {
+                    return Results.NotFound("");
+                }
+
+                return Results.Ok(user);
+            });
+
             app.MapGet("/checkuser/{uid}", (BugSpotterBEDbContext db, string uid) => // check for user
             {
                 var user = db.Users.FirstOrDefault(u => u.Uid == uid);
