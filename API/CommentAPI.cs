@@ -79,6 +79,19 @@ namespace BugSpotterBE.API
                 
             });
 
+            app.MapGet("/comments/user/{userId}", (BugSpotterBEDbContext db, int userId) => // get users comments
+            {
+                var usersComments = db.Comments.Include(c => c.User).Where(c => c.UserId == userId).ToList();
+                if (usersComments != null)
+                {
+                    return Results.Ok(usersComments);
+                }
+                else
+                {
+                    return Results.NotFound("This user has no comments");
+                }
+            });
+
         }
     }
 }
