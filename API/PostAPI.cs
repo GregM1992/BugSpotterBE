@@ -195,7 +195,7 @@ namespace BugSpotterBE.API
                 }
                 else 
                 {
-                    return Results.NotFound("there are no posts that match this tag");
+                    return Results.NotFound("");
                 };
             });
 
