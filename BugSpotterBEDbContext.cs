@@ -47,8 +47,8 @@ public class BugSpotterBEDbContext : DbContext
         });
         modelBuilder.Entity<Suggestion>().HasData(new Suggestion[]
         {
-            new Suggestion {Id = 1, SuggestionContent = "Phiddipus Audax", UserId = 2, PostId = 1},
-            new Suggestion { Id = 2, SuggestionContent = "Praying Mantis", UserId = 1, PostId = 2 },   
+            new Suggestion {Id = 1, SuggestionContent = "Phiddipus Audax", UserId = 2, PostId = 1, SuggestionId = ""},
+            new Suggestion { Id = 2, SuggestionContent = "Praying Mantis", UserId = 1, PostId = 2, SuggestionId = "" },   
         });
         modelBuilder.Entity<User>().HasData(new User[]
         {

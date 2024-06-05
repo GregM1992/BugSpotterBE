@@ -1,4 +1,5 @@
 ﻿using BugSpotterBE.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BugSpotterBE.API
 {
@@ -8,16 +9,28 @@ namespace BugSpotterBE.API
         {
             app.MapGet("/suggestions/{postId}", (BugSpotterBEDbContext db, int postId) => // get all suggestions for single post by postId
             {
-                var postsSuggestions = db.Suggestions.Where(s => s.PostId == postId);
-                if (postsSuggestions.Any())
+                try
                 {
-                    return Results.Ok(postsSuggestions);
+                var postsSuggestions = db.Suggestions.Include(c => c.User).Where(c => c.PostId == postId).Select(c => new
+                {
+                    c.Id,
+                    c.UserId,
+                    c.PostId,
+                    c.SuggestionContent,
+                    c.SuggestionId,
+                    User = new
+                    {
+                        c.User.Id,
+                        c.User.UserName,
 
+                    }
+                }).ToList();
+                    return Results.Ok(postsSuggestions);
                 }
-                else
+                catch
                 {
-                    return Results.NotFound("There are no suggestions for this post yet");
-                }
+                    return Results.NotFound("This post has no suggestions yet");
+                };
             });
             app.MapPost("/suggestions", (BugSpotterBEDbContext db, Suggestion newSuggestion) =>
             {
